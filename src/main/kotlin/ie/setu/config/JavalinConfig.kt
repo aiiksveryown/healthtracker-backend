@@ -19,6 +19,7 @@ class JavalinConfig {
             //added this jsonMapper for our integration tests - serialise objects to json
             it.jsonMapper(JavalinJackson(jsonObjectMapper()))
             it.enableWebjars()
+            it.enableCorsForAllOrigins()
         }.apply {
             exception(Exception::class.java) { e, _ -> e.printStackTrace() }
             error(404) { ctx -> ctx.json("404 - Not Found") }
@@ -32,7 +33,7 @@ class JavalinConfig {
         val remotePort = System.getenv("PORT")
         return if (remotePort != null) {
             Integer.parseInt(remotePort)
-        } else 7000
+        } else 7001
     }
 
     private fun registerRoutes(app: Javalin) {
@@ -67,13 +68,9 @@ class JavalinConfig {
 
     private fun getConfiguredOpenApiPlugin() = OpenApiPlugin(
         OpenApiOptions(
-            Info().apply {
-                title("Health Tracker App")
-                version("1.0")
-                description("Health Tracker API")
-            }
+            Info().version("1.0").description("API for the health-tracker app").title("Health Tracker API")
         ).apply {
-            path("/swagger-docs") // endpoint for OpenAPI json
+            path("/swagger-docs")// endpoint for OpenAPI json
             swagger(SwaggerOptions("/swagger-ui")) // endpoint for swagger-ui
             reDoc(ReDocOptions("/redoc")) // endpoint for redoc
         }

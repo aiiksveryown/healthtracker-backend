@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ie.setu</groupId>
-    <artifactId>healthtrackerrest</artifactId>
+    <artifactId>health-tracker-backend</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>ie.setu healthtrackerrest</name>
+    <name>ie.setu health-tracker-backend</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -44,25 +44,6 @@
             <version>${junit.platform.version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- removing the following 3 dependencies when adding javalin bundle for Swagger docs-->
-        <!-- Adding Javalin dependency -->
-        <!--dependency>
-            <groupId>io.javalin</groupId>
-            <artifactId>javalin</artifactId>
-            <version>4.6.1</version>
-        </dependency-->
-        <!-- These Logging Dependencies are required; warning appears otherwise when running -->
-        <!--dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>2.0.0-alpha7</version>
-        </dependency-->
-        <!--dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>2.0.0-alpha7</version>
-        </dependency-->
-
         <!-- json dependency for localhost running -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -97,8 +78,18 @@
         <dependency>
             <groupId>io.javalin</groupId>
             <artifactId>javalin-bundle</artifactId>
-            <version>4.6.1</version>
+            <version>4.6.7</version>
         </dependency>
+        <dependency>
+            <groupId>io.javalin</groupId>
+            <artifactId>javalin-openapi</artifactId>
+            <version>4.6.7</version>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.javalin</groupId>-->
+<!--            <artifactId>javalin</artifactId>-->
+<!--            <version>5.2.0</version>-->
+<!--        </dependency>-->
         <!-- json dependency for serialising joda date time -->
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
@@ -111,17 +102,6 @@
             <artifactId>unirest-java</artifactId>
             <version>3.13.11</version>
             <classifier>standalone</classifier>
-        </dependency>
-        <!-- adding Vue -->
-        <dependency>
-            <groupId>org.webjars.npm</groupId>
-            <artifactId>vue</artifactId>
-            <version>2.6.10</version>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars.npm</groupId>
-            <artifactId>axios</artifactId>
-            <version>0.19.2</version>
         </dependency>
     </dependencies>
 
@@ -185,19 +165,19 @@
                 </configuration>
             </plugin>
             <!-- Heroku SDK plugin -->
-            <plugin>
-                <groupId>com.heroku.sdk</groupId>
-                <artifactId>heroku-maven-plugin</artifactId>
-                <version>3.0.4</version>
-                <configuration>
-                    <jdkVersion>1.8</jdkVersion>
-                    <appName>health-tracker-20100346</appName>
-                    <processTypes>
-                        <!-- Tell Heroku how to launch your application -->
-                        <web>java -jar ./target/healthtrackerrest-1.0-jar-with-dependencies.jar</web>
-                    </processTypes>
-                </configuration>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>com.heroku.sdk</groupId>-->
+<!--                <artifactId>heroku-maven-plugin</artifactId>-->
+<!--                <version>3.0.4</version>-->
+<!--                <configuration>-->
+<!--                    <jdkVersion>1.8</jdkVersion>-->
+<!--                    <appName>health-tracker-20100346</appName>-->
+<!--                    <processTypes>-->
+<!--                        &lt;!&ndash; Tell Heroku how to launch your application &ndash;&gt;-->
+<!--                        <web>java -jar ./target/healthtrackerrest-1.0-jar-with-dependencies.jar</web>-->
+<!--                    </processTypes>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
             <!-- surefire plugin MOJO - for testing during maven lifecycle-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

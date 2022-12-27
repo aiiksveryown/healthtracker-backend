@@ -62,17 +62,9 @@ jobs:
 
     steps:
        - uses: actions/checkout@v3
-         name: Checkout
-
-       - name: Use Node 16
-         uses: actions/setup-node@v1
-         with:
-           node-version: 16.x
-
-       - name: Install Railway
-         run: npm i -g @railway/cli
-
-       - name: Deploy
-         run: railway up --service=healthtracker-backend
+       - uses: aiiksveryown/action-railway@v1.1.5
+         name: Deploy to Railway
          env:
            RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+         with: 
+           railway_service_name: healthtracker-backend

@@ -62,7 +62,7 @@ jobs:
 
     steps:
        - uses: actions/checkout@v3
-       - uses: aiiksveryown/action-railway@v1.1.5
+       - uses: aiiksveryown/action-railway@v1.0.0
          name: Deploy to Railway
          env:
            RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}

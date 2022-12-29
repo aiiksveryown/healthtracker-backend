@@ -3,6 +3,7 @@ package ie.setu.config
 import ie.setu.controllers.*
 import ie.setu.utils.jsonObjectMapper
 import ie.setu.config.Roles.*
+import ie.setu.utils.ErrorExceptionMapping
 
 import io.javalin.Javalin
 import io.javalin.apibuilder.ApiBuilder.*
@@ -28,6 +29,7 @@ class JavalinConfig {
             error(404) { ctx -> ctx.json("404 - Not Found") }
         }.start(getRemoteAssignedPort())
 
+        ErrorExceptionMapping.register(app)
         registerRoutes(app)
         return app
     }

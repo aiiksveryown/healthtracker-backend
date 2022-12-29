@@ -1,13 +1,12 @@
 package ie.setu.utils
 import com.auth0.jwt.JWT
 import com.auth0.jwt.interfaces.DecodedJWT
-import io.javalin.core.security.RouteRole
-import ie.setu.domain.AdminUser
+import ie.setu.domain.Admin
 import java.util.*
 
 object JwtProvider {
     fun decodeJWT(token: String): DecodedJWT = JWT.require(Cipher.algorithm).build().verify(token)
-    fun createJWT(user: AdminUser, role: String): String? =
+    fun createJWT(user: Admin, role: String): String? =
         JWT.create()
             .withIssuedAt(Date())
             .withSubject(user.email)

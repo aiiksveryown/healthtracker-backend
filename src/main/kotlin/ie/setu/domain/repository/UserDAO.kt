@@ -1,15 +1,27 @@
 package ie.setu.domain.repository
 
 import ie.setu.domain.User
+import ie.setu.domain.db.Admins
 import ie.setu.domain.db.Users
 import ie.setu.utils.mapToUser
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
 import org.jetbrains.exposed.sql.transactions.transaction
 
 /**
  * UserDAO is a repository class that handles all the database operations related to the User entity.
  */
 class UserDAO {
+
+    init {
+        transaction {
+            SchemaUtils.create(Users)
+            // Sanitize db
+            Users.deleteWhere {
+                Users.email like "test_%"
+            }
+        }
+    }
     fun getAll() : ArrayList<User>{
         println("Getting users dao")
         val userList: ArrayList<User> = arrayListOf()

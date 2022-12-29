@@ -1,11 +1,11 @@
 package ie.setu.controllers
 
-import ie.setu.domain.AdminUser
+import ie.setu.domain.Admin
 import ie.setu.ext.isEmailValid
-import ie.setu.domain.AdminUserAuthParams
+import ie.setu.domain.AdminAuthParams
 import ie.setu.domain.repository.AdminDAO
 import ie.setu.utils.*
-import ie.setu.utils.Cipher
+import ie.setu.utils.Cipher.encodePassword
 import ie.setu.utils.JwtProvider
 
 import java.util.*
@@ -17,15 +17,15 @@ import io.javalin.http.Context
 
 object AdminController {
     private val adminDAO = AdminDAO()
-    private val base64Encoder = Base64.getEncoder()
 
     fun login(ctx: Context) {
-        val adminUser : AdminUserAuthParams = jsonToObject(ctx.body())
+        val adminUser : AdminAuthParams = jsonToObject(ctx.body())
         // validate input
-        if (adminUser.email.isEmailValid() && adminUser.password?.isNotEmpty() == true) {
-            val userFound : AdminUser? = adminDAO.findByEmail(adminUser.email)
-            if (userFound?.password == String(base64Encoder.encode(Cipher.encrypt(adminUser.password)))) {
-                ctx.json(userFound.copy(token = generateJwtToken(userFound)))
+        if (adminUser.email.isEmailValid() && adminUser.password.isNotEmpty() == true) {
+
+            val userFound : Admin? = adminDAO.findByEmail(adminUser.email)
+            if (userFound?.password == encodePassword(adminUser.password)) {
+                ctx.json(userFound.copy(token = generateJwtToken(userFound), password = ""))
             } else {
                 throw UnauthorizedResponse("Invalid credentials")
             }
@@ -34,17 +34,17 @@ object AdminController {
         }
     }
 
-    fun logout(ctx: Context) {
-        ctx.json("Logged out")
-    }
-
     fun createAdmin(ctx: Context) {
-        val adminUser : AdminUser = jsonToObject(ctx.body())
-        val userFound : AdminUser? = adminDAO.findByEmail(adminUser.email)
+        val admin : Admin = jsonToObject(ctx.body())
+        // validate input
+        if (!admin.email.isEmailValid() || admin.password.isNotEmpty() != true) {
+            throw BadRequestResponse("Invalid email or password")
+        }
+        val userFound : Admin? = adminDAO.findByEmail(admin.email)
         if (userFound == null) {
-            val userCreated : Int? = adminDAO.create(adminUser)
+            val userCreated : Int? = adminDAO.create(admin.copy(password = admin.password))
             if (userCreated != null) {
-                ctx.json(adminUser.copy(id = userCreated))
+                ctx.json(admin.copy(id = userCreated, token = generateJwtToken(admin), password = ""))
             } else {
                 throw HttpResponseException(500, "Error creating user")
             }
@@ -54,11 +54,18 @@ object AdminController {
     }
 
     fun updateAdminById(ctx: Context) {
-        val adminUser : AdminUser = jsonToObject(ctx.body())
-        val adminUserId : Int = ctx.pathParam("id").toInt()
+        val admin : Admin = jsonToObject(ctx.body())
+        val adminUserId : Int = ctx.pathParam("admin-id").toInt()
+        // validate input
+        if (!admin.email.isEmailValid()) {
+            throw BadRequestResponse("Invalid email or password")
+        }
+
         val userFound = adminDAO.findById(adminUserId)
+        println(userFound)
+        println(adminUserId)
         if (userFound != null) {
-            val userUpdated : Int? = adminDAO.update(adminUser)
+            val userUpdated : Int? = adminDAO.update(admin)
             if (userUpdated != null) {
                 ctx.json(userUpdated)
             } else {
@@ -70,10 +77,10 @@ object AdminController {
     }
 
     fun deleteAdminById(ctx: Context) {
-        val adminUser : AdminUser = jsonToObject(ctx.body())
-        val userFound : AdminUser? = adminDAO.findByEmail(adminUser.email)
+        val adminUserId : Int = ctx.pathParam("admin-id").toInt()
+        val userFound : Admin? = adminDAO.findById(adminUserId)
         if (userFound != null) {
-            val userDeleted : Int = adminDAO.deleteById(adminUser.id)
+            val userDeleted : Int = adminDAO.deleteById(adminUserId)
             if (userDeleted != 0) {
                 ctx.json("User deleted")
             } else {
@@ -85,7 +92,7 @@ object AdminController {
     }
 
     fun getAllAdmins(ctx: Context) {
-        val usersFound : List<AdminUser> = adminDAO.getAll()
+        val usersFound : List<Admin> = adminDAO.getAll()
         if (usersFound.isNotEmpty()) {
             ctx.json(usersFound)
         } else {
@@ -94,8 +101,8 @@ object AdminController {
     }
 
     fun getAdminById(ctx: Context) {
-        val adminUserId : Int = ctx.pathParam("id").toInt()
-        val userFound : AdminUser? = adminDAO.findById(adminUserId)
+        val adminUserId : Int = ctx.pathParam("admin-id").toInt()
+        val userFound : Admin? = adminDAO.findById(adminUserId)
         if (userFound != null) {
             ctx.json(userFound)
         } else {
@@ -103,7 +110,7 @@ object AdminController {
         }
     }
 
-    private fun generateJwtToken(adminUser: AdminUser): String? {
-        return adminUser.role?.let { JwtProvider.createJWT(adminUser, it.name) }
+    private fun generateJwtToken(admin: Admin): String? {
+        return admin.role.let { JwtProvider.createJWT(admin, it.name) }
     }
 }

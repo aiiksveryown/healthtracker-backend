@@ -11,17 +11,18 @@ import io.javalin.http.ForbiddenResponse
 private const val headerTokenName = "Authorization"
 
 object AuthConfig {
-    var useFakeLogin = false
     fun manage(handler: Handler, ctx: Context, permittedRoles: Set<RouteRole>) {
         val jwtToken = getJwtTokenHeader(ctx)
         val userRole = getUserRole(jwtToken) ?: Roles.UNAUTHENTICATED
-        permittedRoles.takeIf { !it.contains(userRole) }?.apply { throw ForbiddenResponse() }
+        if (userRole !in permittedRoles) {
+            throw ForbiddenResponse()
+        }
         ctx.attribute("email", getEmail(jwtToken))
         handler.handle(ctx)
     }
 
     private fun getJwtTokenHeader(ctx: Context): DecodedJWT? {
-        val tokenHeader = ctx.header(headerTokenName)?.substringAfter("Token")?.trim()
+        val tokenHeader = ctx.header(headerTokenName)?.substringAfter("Bearer")?.trim()
             ?: return null
 
         return JwtProvider.decodeJWT(tokenHeader)

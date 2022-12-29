@@ -4,7 +4,7 @@ import ie.setu.domain.Activity
 import ie.setu.domain.User
 import ie.setu.domain.db.Activities
 import ie.setu.domain.db.Users
-import ie.setu.domain.AdminUser
+import ie.setu.domain.Admin
 import ie.setu.domain.db.Admins
 import org.jetbrains.exposed.sql.ResultRow
 
@@ -23,7 +23,7 @@ fun mapToActivity(it: ResultRow) = Activity(
     userId = it[Activities.userId]
 )
 
-fun mapToAccount(it: ResultRow) = AdminUser(
+fun mapToAccount(it: ResultRow) = Admin(
     id = it[Admins.id],
     nickname = it[Admins.nickname],
     email = it[Admins.email],

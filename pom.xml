@@ -103,6 +103,12 @@
             <version>3.13.11</version>
             <classifier>standalone</classifier>
         </dependency>
+        <!-- Auth0 dependencies -->
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>4.2.1</version>
+        </dependency>
     </dependencies>
 
     <pluginRepositories>
@@ -205,6 +211,14 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
             </plugin>
 
         </plugins>

@@ -19,6 +19,9 @@ object ActivityController {
         operationId = "getAllActivities",
         tags = ["Activity"],
         path = "/api/activities",
+        headers = [
+            OpenApiParam(name = "Authorization", description = "Bearer token", required = true, type = String::class)
+        ],
         method = HttpMethod.GET,
         responses = [OpenApiResponse("200", [OpenApiContent(Array<Activity>::class)])]
     )
@@ -43,6 +46,9 @@ object ActivityController {
         operationId = "getActivityByUserId",
         tags = ["Activity"],
         path = "/api/users/{user-id}/activities",
+        headers = [
+            OpenApiParam(name = "Authorization", description = "Bearer token", required = true, type = String::class)
+        ],
         method = HttpMethod.GET,
         pathParams = [OpenApiParam("user-id", Int::class, "The User ID")],
         responses  = [OpenApiResponse("200", [OpenApiContent(Array<Activity>::class)])]
@@ -72,6 +78,9 @@ object ActivityController {
         operationId = "addActivity",
         tags = ["Activity"],
         path = "/api/activities",
+        headers = [
+            OpenApiParam(name = "Authorization", description = "Bearer token", required = true, type = String::class)
+        ],
         method = HttpMethod.POST,
         requestBody = OpenApiRequestBody([OpenApiContent(Activity::class)]),
         responses = [OpenApiResponse("201", [OpenApiContent(Activity::class)])]
@@ -89,6 +98,9 @@ object ActivityController {
         operationId = "getActivityById",
         tags = ["Activity"],
         path = "/api/activities/{activity-id}",
+        headers = [
+            OpenApiParam(name = "Authorization", description = "Bearer token", required = true, type = String::class)
+        ],
         method = HttpMethod.GET,
         pathParams = [OpenApiParam("activity-id", Int::class, "The Activity ID")],
         responses = [OpenApiResponse("200", [OpenApiContent(Activity::class)])]
@@ -112,6 +124,9 @@ object ActivityController {
         operationId = "deleteActivityById",
         tags = ["Activity"],
         path = "/api/activities/{activity-id}",
+        headers = [
+            OpenApiParam(name = "Authorization", description = "Bearer token", required = true, type = String::class)
+        ],
         method = HttpMethod.DELETE,
         pathParams = [OpenApiParam("activity-id", Int::class, "The Activity ID")],
         responses = [OpenApiResponse("204")]
@@ -128,6 +143,9 @@ object ActivityController {
         operationId = "deleteActivitiesByUserId",
         tags = ["Activity"],
         path = "/api/users/{user-id}/activities",
+        headers = [
+            OpenApiParam(name = "Authorization", description = "Bearer token", required = true, type = String::class)
+        ],
         method = HttpMethod.DELETE,
         pathParams = [OpenApiParam("user-id", Int::class, "The User ID")],
         responses = [OpenApiResponse("204")]
@@ -144,7 +162,10 @@ object ActivityController {
         operationId = "updateActivityById",
         tags = ["Activity"],
         path = "/api/activities/{activity-id}",
-        method = HttpMethod.PUT,
+        headers = [
+            OpenApiParam(name = "Authorization", description = "Bearer token", required = true, type = String::class)
+        ],
+        method = HttpMethod.PATCH,
         pathParams = [OpenApiParam("activity-id", Int::class, "The Activity ID")],
         requestBody = OpenApiRequestBody([OpenApiContent(Activity::class)]),
         responses = [OpenApiResponse("200", [OpenApiContent(Activity::class)])]

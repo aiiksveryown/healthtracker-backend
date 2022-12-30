@@ -10,6 +10,16 @@ import org.jetbrains.exposed.sql.transactions.transaction
  * UserDAO is a repository class that handles all the database operations related to the User entity.
  */
 class UserDAO {
+
+    init {
+        transaction {
+            SchemaUtils.create(Users)
+            // Sanitize db
+            Users.deleteWhere {
+                Users.email like "test_%"
+            }
+        }
+    }
     fun getAll() : ArrayList<User>{
         println("Getting users dao")
         val userList: ArrayList<User> = arrayListOf()
@@ -17,7 +27,6 @@ class UserDAO {
             Users.selectAll().map {
                 userList.add(mapToUser(it)) }
         }
-        println(userList)
         return userList
     }
 

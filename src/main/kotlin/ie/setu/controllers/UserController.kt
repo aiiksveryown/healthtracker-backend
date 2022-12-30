@@ -6,6 +6,7 @@ import ie.setu.utils.jsonToObject
 import io.javalin.http.Context
 import io.javalin.plugin.openapi.annotations.*
 
+
 object UserController {
     private val userDao = UserDAO()
     @OpenApi(
@@ -13,6 +14,9 @@ object UserController {
         operationId = "getAllUsers",
         tags = ["User"],
         path = "/api/users",
+        headers = [
+            OpenApiParam(name = "Authorization", description = "Bearer token", required = true, type = String::class)
+        ],
         method = HttpMethod.GET,
         responses = [OpenApiResponse("200", [OpenApiContent(Array<User>::class)])]
     )
@@ -32,6 +36,9 @@ object UserController {
         operationId = "getUserById",
         tags = ["User"],
         path = "/api/users/{user-id}",
+        headers = [
+            OpenApiParam(name = "Authorization", description = "Bearer token", required = true, type = String::class)
+        ],
         method = HttpMethod.GET,
         pathParams = [OpenApiParam("user-id", Int::class, "The user ID")],
         responses  = [OpenApiResponse("200", [OpenApiContent(User::class)])]
@@ -51,6 +58,9 @@ object UserController {
         operationId = "getUserByEmail",
         tags = ["User"],
         path = "/api/users/email/{email}",
+        headers = [
+            OpenApiParam(name = "Authorization", description = "Bearer token", required = true, type = String::class)
+        ],
         method = HttpMethod.GET,
         pathParams = [OpenApiParam("email", Int::class, "The user email")],
         responses  = [OpenApiResponse("200", [OpenApiContent(User::class)])]
@@ -70,9 +80,13 @@ object UserController {
         operationId = "addUser",
         tags = ["User"],
         path = "/api/users",
+        headers = [
+            OpenApiParam(name = "Authorization", description = "Bearer token", required = true, type = String::class)
+        ],
         method = HttpMethod.POST,
         pathParams = [OpenApiParam("user-id", Int::class, "The user ID")],
-        responses  = [OpenApiResponse("200")]
+        requestBody = OpenApiRequestBody([OpenApiContent(User::class)]),
+        responses = [OpenApiResponse("201", [OpenApiContent(User::class)])]
     )
     fun addUser(ctx: Context) {
         val user : User = jsonToObject(ctx.body())
@@ -91,6 +105,9 @@ object UserController {
         operationId = "updateUserById",
         tags = ["User"],
         path = "/api/users/{user-id}",
+        headers = [
+            OpenApiParam(name = "Authorization", description = "Bearer token", required = true, type = String::class)
+        ],
         method = HttpMethod.PATCH,
         pathParams = [OpenApiParam("user-id", Int::class, "The user ID")],
         responses  = [OpenApiResponse("204")]
@@ -107,6 +124,9 @@ object UserController {
         operationId = "deleteUserById",
         tags = ["User"],
         path = "/api/users/{user-id}",
+        headers = [
+            OpenApiParam(name = "Authorization", description = "Bearer token", required = true, type = String::class)
+        ],
         method = HttpMethod.DELETE,
         pathParams = [OpenApiParam("user-id", Int::class, "The user ID")],
         responses  = [OpenApiResponse("204")]

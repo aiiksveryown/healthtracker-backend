@@ -13,6 +13,11 @@ object AuthConfig {
             handler.handle(ctx)
             return
         }
+
+        if (Roles.UNAUTHENTICATED in permittedRoles) {
+            handler.handle(ctx)
+            return
+        }
         val jwtToken = getJwtTokenHeader(ctx)
         val userRole = getUserRole(jwtToken) ?: Roles.UNAUTHENTICATED
         if (userRole !in permittedRoles) {

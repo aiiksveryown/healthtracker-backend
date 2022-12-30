@@ -1,11 +1,9 @@
 package ie.setu.domain.repository
 
 import ie.setu.domain.User
-import ie.setu.domain.db.Admins
 import ie.setu.domain.db.Users
 import ie.setu.utils.mapToUser
 import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
 import org.jetbrains.exposed.sql.transactions.transaction
 
 /**
@@ -29,7 +27,6 @@ class UserDAO {
             Users.selectAll().map {
                 userList.add(mapToUser(it)) }
         }
-        println(userList)
         return userList
     }
 

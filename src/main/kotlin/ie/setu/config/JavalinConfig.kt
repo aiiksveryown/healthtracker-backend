@@ -13,7 +13,6 @@ import io.javalin.plugin.openapi.OpenApiPlugin
 import io.javalin.plugin.openapi.ui.ReDocOptions
 import io.javalin.plugin.openapi.ui.SwaggerOptions
 import io.swagger.v3.oas.models.info.Info
-import okhttp3.internal.addHeaderLenient
 
 class JavalinConfig {
     fun startJavalinService(): Javalin {
@@ -77,10 +76,10 @@ class JavalinConfig {
                     patch(AdminController::updateAdminById, MANAGER)
                     delete(AdminController::deleteAdminById, MANAGER)
                 }
-                path("login") {
+                path("/login") {
                     post(AdminController::login, UNAUTHENTICATED)
                     path("/refresh") {
-                        get(AdminController::adminRefresh, ADMIN, MANAGER)
+                        post(AdminController::adminRefresh, ADMIN, MANAGER)
                     }
                 }
             }

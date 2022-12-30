@@ -57,12 +57,30 @@ open class AdminControllerTest {
             val adminManager = managerAdminAuthParams
             val response = req.adminLogin(adminManager)
 
+            println(response.status)
+
             assert(response.status == 200)
 
             val adminResponse = jsonToObject<Admin>(response.body.toString())
 
             assert(adminResponse.email == adminManager.email)
             assert(adminResponse.token != null)
+        }
+
+        @Test
+        fun `refresh user returns 200`() {
+            val adminManager = managerAdminAuthParams
+            val response = req.adminLogin(adminManager)
+
+            val adminResponse = jsonToObject<Admin>(response.body.toString())
+
+            val responseRefresh = req.refresh(adminResponse.token!!)
+
+            assert(responseRefresh.status == 200)
+
+            val adminRefreshResponse = jsonToObject<Admin>(responseRefresh.body.toString())
+            assert(adminRefreshResponse.email == adminManager.email)
+            assert(adminRefreshResponse.token != null)
         }
     }
 

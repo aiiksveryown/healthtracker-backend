@@ -54,6 +54,13 @@ class HttpUtil(port: Int) {
                 .body(admin)
                 .asJson()
         }
+
+        fun refresh(token: String) : HttpResponse<JsonNode> {
+            return Unirest.get("$origin/api/admins/login/refresh")
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer $token")
+                .asJson()
+        }
     }
 
     inner class UserRequest {

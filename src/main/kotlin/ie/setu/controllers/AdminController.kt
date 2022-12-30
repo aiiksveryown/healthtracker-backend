@@ -1,6 +1,5 @@
 package ie.setu.controllers
 
-import ie.setu.domain.Activity
 import ie.setu.domain.Admin
 import ie.setu.ext.isEmailValid
 import ie.setu.domain.AdminAuthParams
@@ -42,6 +41,18 @@ object AdminController {
             }
         } else {
             throw BadRequestResponse("Invalid credentials")
+        }
+    }
+
+    fun adminRefresh(ctx: Context) {
+        val token = getJwtTokenHeader(ctx)
+        val email = getEmail(token)
+        val userFound : Admin? = email?.let { adminDAO.findByEmail(it) }
+
+        if (userFound != null && token != null) {
+            ctx.json(userFound.copy(password = "", token = token.token))
+        } else {
+            throw UnauthorizedResponse("Invalid credentials")
         }
     }
 
@@ -91,8 +102,6 @@ object AdminController {
         }
 
         val userFound = adminDAO.findById(adminUserId)
-        println(userFound)
-        println(adminUserId)
         if (userFound != null) {
             val userUpdated : Int = adminDAO.update(admin)
             ctx.json(userUpdated)

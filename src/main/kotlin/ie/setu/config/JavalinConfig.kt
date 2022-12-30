@@ -79,6 +79,9 @@ class JavalinConfig {
                 }
                 path("login") {
                     post(AdminController::login, UNAUTHENTICATED)
+                    path("/refresh") {
+                        get(AdminController::adminRefresh, ADMIN, MANAGER)
+                    }
                 }
             }
 

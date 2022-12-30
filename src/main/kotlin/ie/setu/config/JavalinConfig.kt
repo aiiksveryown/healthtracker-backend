@@ -13,6 +13,7 @@ import io.javalin.plugin.openapi.OpenApiPlugin
 import io.javalin.plugin.openapi.ui.ReDocOptions
 import io.javalin.plugin.openapi.ui.SwaggerOptions
 import io.swagger.v3.oas.models.info.Info
+import okhttp3.internal.addHeaderLenient
 
 class JavalinConfig {
     fun startJavalinService(): Javalin {
@@ -88,6 +89,8 @@ class JavalinConfig {
         OpenApiOptions(
             Info().version("1.0").description("API for the health-tracker app").title("Health Tracker API")
         ).apply {
+            ignorePath("/swagger-ui")
+            activateAnnotationScanningFor("ie.setu.controllers")
             path("/swagger-docs")// endpoint for OpenAPI json
             swagger(SwaggerOptions("/swagger-ui")) // endpoint for swagger-ui
             reDoc(ReDocOptions("/redoc")) // endpoint for redoc

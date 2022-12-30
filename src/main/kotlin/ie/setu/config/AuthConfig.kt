@@ -12,6 +12,11 @@ private const val headerTokenName = "Authorization"
 
 object AuthConfig {
     fun manage(handler: Handler, ctx: Context, permittedRoles: Set<RouteRole>) {
+        // Skip auth for swagger
+        if (ctx.path().startsWith("/swagger")) {
+            handler.handle(ctx)
+            return
+        }
         val jwtToken = getJwtTokenHeader(ctx)
         val userRole = getUserRole(jwtToken) ?: Roles.UNAUTHENTICATED
         if (userRole !in permittedRoles) {

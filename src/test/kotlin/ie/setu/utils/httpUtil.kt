@@ -56,7 +56,7 @@ class HttpUtil(port: Int) {
         }
 
         fun refresh(token: String) : HttpResponse<JsonNode> {
-            return Unirest.get("$origin/api/admins/login/refresh")
+            return Unirest.post("$origin/api/admins/login/refresh")
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer $token")
                 .asJson()

@@ -44,8 +44,9 @@ object AdminController {
         }
     }
 
-    fun adminRefresh(ctx: Context) {
+    fun refreshAdminData(ctx: Context) {
         val token = getJwtTokenHeader(ctx)
+
         val email = getEmail(token)
         val userFound : Admin? = email?.let { adminDAO.findByEmail(it) }
 

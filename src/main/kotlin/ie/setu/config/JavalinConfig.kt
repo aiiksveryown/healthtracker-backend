@@ -79,11 +79,10 @@ class JavalinConfig {
                 path("/login") {
                     post(AdminController::login, UNAUTHENTICATED)
                     path("/refresh") {
-                        post(AdminController::adminRefresh, ADMIN, MANAGER)
+                        post(AdminController::refreshAdminData, ADMIN, MANAGER)
                     }
                 }
             }
-
         }
     }
 

@@ -2,15 +2,16 @@ name: Deploy to Railway
 
 on:
   push:
+    paths:
+      - 'src/**'
     branches:
       - master
-    folders:
-      - 'src'
+
   pull_request:
+    paths:
+      - 'src/**'
     branches:
       - master
-    folders:
-      - 'src'
 
 jobs:
 

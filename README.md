@@ -1,4 +1,4 @@
-# Health-Tracker Frontend
+# Health-Tracker Backend
 This project is the backend of a health tracker application. It is built using Kotlin and Javalin, and is responsible for handling API calls and interacting with the database.
 
 # How it works
